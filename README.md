@@ -1,4 +1,4 @@
-# YouTubeChapters
+# youtube-dl split by chapters
 
 Adds a chapter splitting postprocessor to `youtube-dl` to allow you to chop videos and audio into chapters.
 
