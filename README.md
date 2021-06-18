@@ -9,3 +9,5 @@ Example:
 The output will be a directory containing each chapter as a separate audio file.
 
 Note: You can use the same options and arguments as the normal `youtube-dl`. Works with audio and video from youtube.
+
+Requirements: youtube-dl and ffmpeg
