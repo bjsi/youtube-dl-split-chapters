@@ -6,6 +6,7 @@ from youtube_dl import YoutubeDL, options
 from youtube_dl.postprocessor.common import PostProcessor
 from opts import parse_opts
 import subprocess
+from youtube_dl.utils import sanitize_filename
 
 class ChapterProcessor(PostProcessor):
 
@@ -48,7 +49,8 @@ class ChapterProcessor(PostProcessor):
         return True
 
     def run(self, info):
-        self.file = DownloadedFile(info)
+        restricted = self._downloader.params.get("restrictfilenames", False)
+        self.file = DownloadedFile(info, restricted)
         if self.split_into_chapters():
             return [info["filepath"]], info
         else:
@@ -60,11 +62,13 @@ class DownloadedFile:
     media_filepath: str
     fulltitle: str
     chapters: T.Optional[T.Dict]
+    restricted = False
 
-    def __init__(self, info: T.Dict):
+    def __init__(self, info: T.Dict, restricted: bool):
         self.chapters = info.get("chapters")
         self.media_filepath = info["filepath"]
         self.fulltitle = info["fulltitle"]
+        self.restricted = restricted
 
     def output_chapter_file(self, chapter: str):
         basename = chapter + self.extension
@@ -84,7 +88,7 @@ class DownloadedFile:
 
     @property
     def output_folder(self):
-        return os.path.join(self.basedir, self.fulltitle)
+        return os.path.join(self.basedir, sanitize_filename(self.fulltitle, self.restricted))
 
     def create_output_folder(self):
         try:
@@ -100,7 +104,7 @@ def parse_urls():
 
 def download(opts: T.Dict, urls: T.List[str]):
     with YoutubeDL(opts) as ydl:
-        ydl.add_post_processor(ChapterProcessor())
+        ydl.add_post_processor(ChapterProcessor(ydl))
         ydl.download(urls)
 
 if __name__ == "__main__":
