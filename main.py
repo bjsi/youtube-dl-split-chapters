@@ -30,6 +30,8 @@ class ChapterProcessor(PostProcessor):
             "-i", self.file.media_filepath,
             "-ss", str(start),
             "-t", str(diff),
+            "-acodec", "copy",
+            "-vcodec", "copy",
             self.file.output_chapter_file(chapter["title"])
             ]
         ret = subprocess.run(args)
