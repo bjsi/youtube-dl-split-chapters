@@ -6,7 +6,8 @@ from youtube_dl import YoutubeDL, options
 from youtube_dl.postprocessor.common import PostProcessor
 from opts import parse_opts
 import subprocess
-from youtube_dl.utils import sanitize_filename
+from youtube_dl.utils import sanitize_filename, sanitize_path
+
 
 class ChapterProcessor(PostProcessor):
 
@@ -24,7 +25,7 @@ class ChapterProcessor(PostProcessor):
         start = chapter["start_time"]
         end = chapter["end_time"]
         diff = end - start
-        args =  [
+        args = [
             "ffmpeg",
             "-i", self.file.media_filepath,
             "-ss", str(start),
@@ -72,7 +73,7 @@ class DownloadedFile:
 
     def output_chapter_file(self, chapter: str):
         basename = chapter + self.extension
-        return os.path.join(self.output_folder, basename)
+        return os.path.join(self.output_folder, sanitize_filename(basename, self.restricted))
 
     @property
     def extension(self):
@@ -88,7 +89,7 @@ class DownloadedFile:
 
     @property
     def output_folder(self):
-        return os.path.join(self.basedir, sanitize_filename(self.fulltitle, self.restricted))
+        return sanitize_path(os.path.join(self.basedir, sanitize_filename(self.fulltitle, self.restricted)))
 
     def create_output_folder(self):
         try:
@@ -99,13 +100,16 @@ class DownloadedFile:
         except:
             return False
 
+
 def parse_urls():
     return options.parseOpts()[2]
+
 
 def download(opts: T.Dict, urls: T.List[str]):
     with YoutubeDL(opts) as ydl:
         ydl.add_post_processor(ChapterProcessor(ydl))
         ydl.download(urls)
+
 
 if __name__ == "__main__":
     opts = parse_opts()
