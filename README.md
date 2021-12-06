@@ -1,12 +1,14 @@
-# youtube-dl split by chapters
+# download-youtube-chapters
 
-Adds a chapter splitting postprocessor to `youtube-dl` to allow you to chop videos and audio into chapters.
+This tool is a fork of the great [youtube-dl-split-chapters](https://github.com/bjsi/youtube-dl-split-chapters) script.
 
-Example:
+The main goal is to provide an easy poetry package with an easy interface for downloading chapters of a youtube video.
 
-`./main.py -x -f "bestaudio/best" <URL>`
+Example for downloading mp3 subchapters as files:
 
-In this case, the output will be a directory containing each chapter as a separate audio file.
+```bash
+poetry run python ./youtube-dl-split-chapters/main.py -x -f "bestaudio/best" --keep-fragments --audio-format mp3 https://www.youtube.com/watch?v=imtPF2b2Q4M
+```
 
 Note: You can use the same options and arguments as the normal `youtube-dl`. Works with audio and video from youtube.
 
