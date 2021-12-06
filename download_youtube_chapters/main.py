@@ -4,7 +4,7 @@ import os
 import typing as T
 from youtube_dl import YoutubeDL, options
 from youtube_dl.postprocessor.common import PostProcessor
-from opts import parse_opts
+from download_youtube_chapters.opts import parse_opts
 import subprocess
 from youtube_dl.utils import sanitize_filename, sanitize_path
 
@@ -113,7 +113,11 @@ def download(opts: T.Dict, urls: T.List[str]):
         ydl.download(urls)
 
 
-if __name__ == "__main__":
+def main():
     opts = parse_opts()
     urls = parse_urls()
     download(opts, urls)
+
+
+if __name__ == "__main__":
+    main()

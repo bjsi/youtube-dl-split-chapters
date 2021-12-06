@@ -7,7 +7,7 @@ The main goal is to provide an easy poetry package with an easy interface for do
 Example for downloading mp3 subchapters as files:
 
 ```bash
-poetry run python ./youtube-dl-split-chapters/main.py -x -f "bestaudio/best" --keep-fragments --audio-format mp3 https://www.youtube.com/watch?v=imtPF2b2Q4M
+poetry run download-youtube-chapters -x -f "bestaudio/best" --keep-fragments --audio-format mp3 https://www.youtube.com/watch?v=imtPF2b2Q4M
 ```
 
 Note: You can use the same options and arguments as the normal `youtube-dl`. Works with audio and video from youtube.
